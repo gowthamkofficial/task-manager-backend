@@ -10,7 +10,8 @@ require('dotenv').config()
 
 // Routes
 
-const masterRouter = require('./src/modules/master/master.route')
+const masterRouter = require('./src/modules/master/master.route');
+const userRouter = require('./src/modules/users/user.route');
 
 
 
@@ -33,7 +34,8 @@ connection()
 
 // Router
 
-app.use('/', masterRouter)
+app.use('/', masterRouter);
+app.use('/', userRouter)
 
 
 app.use('/api-docs', swagger.serve, swagger.setup(swaggerDocument))
