@@ -6,7 +6,7 @@ async function getAllStates(req, res) {
     const data = await states.findAll();
     res.json(new Success(200, "Listed states successfully", data));
   } catch (error) {
-    res.json(new Failure(500, error));
+    res.status(500).json(new Failure(500, error));
   }
 }
 
@@ -16,7 +16,7 @@ async function getAllDistricts(req, res) {
     const data = await districts.findAll({ where: { stateId: id } });
     res.json(new Success(200, "Listed districts successfully", data));
   } catch (error) {
-    res.json(new Failure(500, error));
+    res.status(500).json(new Failure(500, error));
   }
 }
 

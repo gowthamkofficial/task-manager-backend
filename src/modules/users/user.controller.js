@@ -12,28 +12,24 @@ async function getAllUsers(req, res) {
     try {
         const { limit, page, search, gender } = req.query;
 
-        const paginate = checkNull(page) ? (page - 1) * limit ?? 0 : 0
+        const paginate = checkNull(page) ? (page - 1) * limit : 0
 
         const data = await userModel.findAndCountAll({
-            where: {
-                name: { [Op.like]: `%${search}%` },
-                email: { [Op.like]: `%${search}%` },
-                mobile: { [Op.like]: `%${search}%` },
-                gender: gender,
+            // where: {
+            //     name: { [Op.like]: `%${search}%` },
+            //     email: { [Op.like]: `%${search}%` },
+            //     mobile: { [Op.like]: `%${search}%` },
+            //     gender: gender,
 
-            },
-            offset: paginate,
-            limit: limit ?? 10
+            // },
+            // offset: paginate,
+            // limit: limit ?? 10
         })
-        res.json(new Success(200, 'Listed users successfully', data))
+        res.json(new Success(200, 'Listed users successfully', data, data.count))
     } catch (error) {
-        res.json(new Failure('Internal server error', error))
+        res.status(500).json(new Failure('Internal server error', error))
     }
 }
-
-
-
-
 
 async function createUser(req, res) {
 
@@ -46,7 +42,7 @@ async function createUser(req, res) {
 
         res.json(new Success(201, 'Created user successfully', data.dataValues))
     } catch (error) {
-        res.json(new Failure(null, error))
+        res.status(500).json(new Failure(null, error))
     }
 }
 
@@ -67,11 +63,23 @@ async function updateUser(req, res) {
             res.json(new Failure('User not found'))
         }
     } catch (error) {
-        res.json(new Failure('Internal server error', error))
+        res.status(500).json(new Failure('Internal server error', error))
     }
 }
 
 
+async function viewUser(req, res) {
+    try {
+        const data = await userModel.findByPk(req.params?.id);
+        if (checkNull(data)) {
+            res.status(200).json(new Success(200, 'User view successfully', data.dataValues))
+        } else {
+            res.status(500).json(new Success('User not found'))
+        }
+    } catch (error) {
+        res.status(500).json(new Success('User not found', error))
+    }
+}
 
 
 async function checkDuplicateUser(req, res, next) {
@@ -204,4 +212,4 @@ const updateUserJoi = joi.object().keys({
 
 
 
-module.exports = { getAllUsers, createUser, updateUser, createUserJoi, updateUserJoi, checkDuplicateUser, checkDuplicateUserUpdate }
+module.exports = { getAllUsers, createUser, updateUser, viewUser, createUserJoi, updateUserJoi, checkDuplicateUser, checkDuplicateUserUpdate }

@@ -12,6 +12,9 @@ require('dotenv').config()
 
 const masterRouter = require('./src/modules/master/master.route');
 const userRouter = require('./src/modules/users/user.route');
+const sessionRouter = require('./src/modules/session/session.route');
+const verifyToken = require('./src/common/middlewares/authentication.middleware');
+const taskRouter = require('./src/modules/tasks/tasks.route');
 
 
 
@@ -35,7 +38,9 @@ connection()
 // Router
 
 app.use('/', masterRouter);
-app.use('/', userRouter)
+app.use('/', userRouter);
+app.use('/', sessionRouter)
+app.use('/', taskRouter)
 
 
 app.use('/api-docs', swagger.serve, swagger.setup(swaggerDocument))
