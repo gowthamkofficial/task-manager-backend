@@ -15,7 +15,7 @@ const Tasks = sequelize.define('Tasks', {
     },
     status: {
         type: DataTypes.STRING,
-        defaultValue: 0,
+        defaultValue: 1,
         allowNull: true
     }
 })
@@ -34,7 +34,7 @@ const SubTasks = sequelize.define('SubTasks', {
     },
     status: {
         type: DataTypes.STRING,
-        defaultValue: 0,
+        defaultValue: 1,
         allowNull: true
     }
 })
